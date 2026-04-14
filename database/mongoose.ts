@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
+if (!MONGODB_URI) {
+  throw new Error("MONGODB_URI missing in env");
+}
+
 let cached = (global as any).mongoose;
 
 if (!cached) {
@@ -9,10 +13,6 @@ if (!cached) {
 }
 
 export const connectToDatabase = async () => {
-  if (!MONGODB_URI) {
-    throw new Error("MONGODB_URI is missing in .env");
-  }
-
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
